@@ -17,9 +17,6 @@ from urllib.error import HTTPError
 
 from twython import Twython
 
-from django.contrib.auth import authenticate, login, logout as django_logout
-from django.contrib.auth import get_user_model
-
 
 TWITTER_END_PT = 'https://api.twitter.com/'
 TWITTER_API_VER = '1.1'

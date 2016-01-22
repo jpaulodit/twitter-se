@@ -10,7 +10,7 @@ from django.conf import settings
 DEBUG = os.environ.get('DEBUG', 'on') == 'on'
 
 # get secret key from env variables else set to some random string of 32 len.
-SECRET_KEY = os.environ.get('SECRET_KEY', 'd_x*m0di6nv_fvpn8q=139_4ldqwk2ad#zdw+%p0g#es4pm-p4')
+SECRET_KEY = os.environ.get('SECRET_KEY', '{{ secret_key }}')
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 
