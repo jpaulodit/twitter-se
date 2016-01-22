@@ -17,6 +17,7 @@ from urllib.error import HTTPError
 
 from twython import Twython
 
+#from django.core.urlresolvers import reverse
 
 TWITTER_END_PT = 'https://api.twitter.com/'
 TWITTER_API_VER = '1.1'
@@ -194,7 +195,12 @@ def oauth_login(request):
 
 	twitter = Twython(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
 
-	auth = twitter.get_authentication_tokens(callback_url='http://127.0.0.1:8000/callback')
+	if request.is_secure():
+		callback_url = 'https://' + request.META['HTTP_HOST'] + '/callback'
+	else:
+		callback_url = 'http://' + request.META['HTTP_HOST'] + '/callback'
+	
+	auth = twitter.get_authentication_tokens(callback_url=callback_url)
 
 	if auth['oauth_callback_confirmed'] == 'true':
 
