@@ -52,13 +52,6 @@ settings.configure(
 		}
 	},
 
-	DATABASES = {
-	    'default': {
-	        'ENGINE': 'django.db.backends.sqlite3',
-	        'NAME': 'mydatabase',
-	    }
-	},
-
 	SESSION_ENGINE=('django.contrib.sessions.backends.cache'),
 
     CONSUMER_KEY=CONSUMER_KEY,
