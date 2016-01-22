@@ -21,21 +21,15 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 
-					<!--
-					<li>
-						<a href="{% url 'page' 'login' %}">
-							<img class="signin_btn" src="{% static 'images/sign-in-with-twitter-gray.png' %}">
-						</a>
-					</li>-->
-
-
-					<li {% if slug == 'login' %}class="active"{% endif %}>
-						<a href="{% url 'page' 'login' %}">Sign in with Twitter</a>
-					</li>
-					
-					<li {% if slug == 'logout' %}class="active"{% endif %}>
-						<a href="{% url 'page' 'logout' %}">Logout</a>
-					</li>
+					{% if person == None %}
+						<li class="active">
+							<a href="{% url 'page' 'login' %}">Sign in with Twitter</a>
+						</li>	
+					{% else %}
+						<li class="active">
+							<a href="{% url 'page' 'logout' %}">Logout {{ person }}</a>
+						</li>
+					{% endif %}
 
 				</ul>
 			</div>

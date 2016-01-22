@@ -20,7 +20,6 @@ from twython import Twython
 from django.contrib.auth import authenticate, login, logout as django_logout
 from django.contrib.auth import get_user_model
 
-#from .models import TwitterProfile
 
 TWITTER_END_PT = 'https://api.twitter.com/'
 TWITTER_API_VER = '1.1'
@@ -32,6 +31,9 @@ SEARCH_TWEET_URL = TWITTER_END_PT + TWITTER_API_VER + '/search/tweets.json'
 def get_data_using_oauth2(q):
 
 	"""Application-only Authentication"""
+
+	if settings.DEBUG:
+		print('Getting data using OAUTH2')
 
 	consumer_key = settings.CONSUMER_KEY
 	consumer_secret = settings.CONSUMER_SECRET
@@ -47,6 +49,9 @@ def get_data_using_oauth1(request, q):
 
 	"""Implementing sign in with Twitter"""
 
+	if settings.DEBUG:
+		print('Getting data using OAUTH1')
+
 	consumer_key = settings.CONSUMER_KEY
 	consumer_secret = settings.CONSUMER_SECRET
 	oauth_token = request.session.get('oauth_token')
@@ -54,26 +59,6 @@ def get_data_using_oauth1(request, q):
 	twitter = Twython(consumer_key, consumer_secret, oauth_token, oauth_token_secret)
 	data = twitter.search(q=q)
 	return data
-
-
-# def get_access_token():
-# 	bearer_token = '%s:%s' % (consumer_key, consumer_secret)
-# 	encoded_bearer_token = base64.b64encode(bearer_token.encode('ascii'))
-# 	request = Request(REQUEST_TOKEN_URL)
-# 	request.add_header('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8')
-# 	request.add_header('Authorization','Basic %s' % encoded_bearer_token.decode('utf-8'))
-
-# 	request_data = 'grant_type=client_credentials'.encode('ascii')
-# 	request.data = request_data
-
-# 	response = urlopen(request)
-# 	raw_data = response.read().decode('utf-8')
-# 	data = json.loads(raw_data)
-
-# 	if data['token_type'] == 'bearer':		
-# 		return data['access_token']
-# 	else:
-# 		return None
 
 
 
@@ -153,25 +138,6 @@ def search_tweet(request):
 			else:
 				# set data to expire after 30 seconds
 				cache.set(encoded_tweet_q, data, 30)
-
-
-			# my_access_token = get_access_token()
-
-			# if my_access_token:
-			# 	url = SEARCH_TWEET_URL + '?' + tweet_q
-			# 	twitter_request = Request(url)
-			# 	twitter_request.add_header('Authorization', 'Bearer %s' % my_access_token)
-
-			# 	try:
-			# 		twitter_response = urlopen(twitter_request)
-			# 		raw_data = twitter_response.read().decode('utf-8')
-			# 		data = json.loads(raw_data)
-
-			# 		
-
-			# 	except HTTPError:
-			# 		# error: issue connecting to twitter API
-			# 		return HttpResponseServerError('Internal Server Error<br><a href="/">Home</a>')
 		
 
 		context = process_tweets(data)
@@ -180,6 +146,7 @@ def search_tweet(request):
 
 		page = get_page_or_404('result.html')
 		context['page'] = page
+		context['person'] = request.session.get('username', None)
 
 		return render(request, 'page.html', context)
 	
@@ -220,25 +187,6 @@ def oauth_callback(request):
 		request.session['oauth_token'] = authorized_tokens['oauth_token']
 		request.session['oauth_token_secret'] = authorized_tokens['oauth_token_secret']
 
-		# User = get_user_model()
-
-		# try:
-		# 	user = User.objects.get(username=authorized_tokens['screen_name'])
-		# except User.DoesNotExist:
-
-		# 	user = User.objects.create_user(authorized_tokens['screen_name'])
-		# 	profile = TwitterProfile()
-		# 	profile.user = user
-		# 	profile.oauth_token = authorized_tokens['oauth_token']
-		# 	profile.oauth_secret = authorized_tokens['oauth_token_secret']
-		# 	profile.save()
-
-		# user = authenticate(
-		# 	username=authorized_tokens['screen_name'],
-		# 	password=authorized_tokens['oauth_token_secret']
-		# )
-
-		# login(request, user)
 
 	return redirect('/')
 
@@ -278,6 +226,7 @@ def page(request, slug='index'):
 	context = {
 		'slug' : slug,
 		'page' : page,
+		'person' : request.session.get('username', None)
 	}
 
 	return render(request, 'page.html', context)	
