@@ -1,0 +1,12 @@
+body {
+	padding: 50px 0 30px;
+}
+
+.search_btn {
+	float : right;
+	width : 16%;
+}
+
+.signin_btn {
+	padding-top: 10px;
+}

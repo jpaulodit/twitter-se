@@ -1,0 +1,52 @@
+<div class="container">
+
+    <div class="row">
+        <h2>Tweet Query Result</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col-sm-2">Name</th>
+                    <th>Tweet Content</th>
+                    <th class="col-sm-1"># times favored</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for tweet_info in tweet_tbl %}
+
+                <tr>
+                    <td>{{ tweet_info.name }}</td>
+                    <td>{{ tweet_info.text }}</td>
+                    <td>{{ tweet_info.num_fav }}</td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        <h2>Hashtag Count</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col-sm-3">Hash Tag</th>
+                    <th calss="col-sm-1">Count</th>
+                </tr>            
+            </thead>
+            <tbody>
+
+                {% for hashtag_cnt in hashtag_tbl %}
+
+                <tr>
+                    <td>{{ hashtag_cnt.name }}</td>
+                    <td>{{ hashtag_cnt.count }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
